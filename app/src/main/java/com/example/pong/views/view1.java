@@ -33,8 +33,16 @@ public class view1 extends View{
             case MotionEvent.ACTION_MOVE: {
                 final float x = event.getX();
                 final float dx = x - touched_x;
-
-                slider.x += dx;
+                //slider.move(dx);
+                if (slider.x >= 0 && slider.x <= canvas_width-300){
+                    slider.x+=dx;
+                }
+                if(slider.x <=0  && dx>0){
+                    slider.x+=dx;
+                }
+                if(slider.x >= canvas_width-300 && dx<0){
+                    slider.x+=dx;
+                }
                 touched_x = x;
 
                 invalidate();
@@ -99,6 +107,14 @@ public class view1 extends View{
             this.pt.setColor(color);
             this.rectF = new RectF();
         }
+        public void move(float dx) {
+            if (slider.x >= 0 && slider.x <= canvas_width){
+                slider.x+=dx;
+            }
+        }
+        public float getWidth(Canvas canvas){
+            return canvas.getWidth();
+        }
 
     }
 
@@ -107,6 +123,7 @@ public class view1 extends View{
     public static int score = 0 ;
     public static boolean game_ovr = false;
     public static MediaPlayer song;
+    public static float canvas_width;
 
     public view1(Context context) {
         super(context);
@@ -151,6 +168,7 @@ public class view1 extends View{
         canvas.drawCircle(ball.x, ball.y, ball.size, ball.paint);
         canvas.drawRect(slider.rectF, slider.pt);
 
+        canvas_width = getWidth();
 
         if(!game_ovr){
             ball.move(canvas);
@@ -168,5 +186,8 @@ public class view1 extends View{
             game_ovr = true;
         }
         postInvalidate();
+    }
+    public boolean in_range(float a, float b,float c){
+        return (a>=b && a<=c);
     }
 }
