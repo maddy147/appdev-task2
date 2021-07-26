@@ -107,15 +107,6 @@ public class view1 extends View{
             this.pt.setColor(color);
             this.rectF = new RectF();
         }
-        public void move(float dx) {
-            if (slider.x >= 0 && slider.x <= canvas_width){
-                slider.x+=dx;
-            }
-        }
-        public float getWidth(Canvas canvas){
-            return canvas.getWidth();
-        }
-
     }
 
     public static Ball ball;
@@ -186,8 +177,5 @@ public class view1 extends View{
             game_ovr = true;
         }
         postInvalidate();
-    }
-    public boolean in_range(float a, float b,float c){
-        return (a>=b && a<=c);
     }
 }
