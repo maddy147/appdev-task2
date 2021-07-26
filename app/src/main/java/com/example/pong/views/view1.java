@@ -18,31 +18,33 @@ import androidx.annotation.RequiresApi;
 
 public class view1 extends View{
 
-    /*@SuppressLint("ClickableViewAccessibility")
-    public boolean onTouchEvent(MotionEvent event) {
-        if(in_range(event.getX(),0,1400)){
-            slider.x = event.getX();
-            postInvalidate();
-        }
-        return false;
-    }*/
-
+    float touched_x;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                if(in_range(event.getX(),0,1400)){
-                    slider.x = event.getX();
-                    //postInvalidate();
-                }
-                break;
+        final int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN: {
 
-            case MotionEvent.ACTION_UP:
+                touched_x = event.getX();
                 break;
+            }
+
+            case MotionEvent.ACTION_MOVE: {
+                final float x = event.getX();
+                final float dx = x - touched_x;
+
+                slider.x += dx;
+                touched_x = x;
+
+                invalidate();
+                break;
+            }
         }
+
         return true;
     }
+
 
     public static class Ball{
         public float dir_x =  1;
@@ -76,10 +78,7 @@ public class view1 extends View{
                 if (this.y - size < 0) {
                     dir_y = dir_y * -1;
                     song.start();
-                }//|| this.y+size > canvas.getHeight()
-                /*if (this.y + size > canvas.getHeight()) {
-                    dir_y = dir_y * -1;
-                }*/
+                }
             }
         }
         public  void  reset(){
@@ -91,8 +90,6 @@ public class view1 extends View{
 
     public static class Slider{
         public float x;
-        //public int dir = 1;
-        //public float speed = 5;
         public Paint pt;
         public RectF rectF;
 
@@ -103,12 +100,6 @@ public class view1 extends View{
             this.rectF = new RectF();
         }
 
-        /*public void move(Canvas canvas) {
-            this.x += speed * dir;
-            if (x + 250 > canvas.getWidth() || x <= 0) {
-                dir *= -1;
-            }
-        }*/
     }
 
     public static Ball ball;
@@ -178,10 +169,4 @@ public class view1 extends View{
         }
         postInvalidate();
     }
-    public boolean in_range(float a, float b,float c) {
-        return (a >= b && a <= c);
-    }
-    /*public static float rand_no(float a, float b){
-        return (float) ((Math.random()*(b-a))+a);
-    }*/
 }
